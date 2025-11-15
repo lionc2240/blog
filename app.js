@@ -38,17 +38,28 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const html = await response.text();
             
-            // Parse HTML to extract markdown files
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
+            // Parse HTML to extract markdown files using regex
+            const mdFileRegex = /<a href="([^"]*\.md)">([^<]*)<\/a>/g;
+            const links = [];
+            let match;
             
-            // Look for links to .md files
-            const links = Array.from(doc.querySelectorAll('a'))
-                .map(a => a.textContent || a.href)
-                .filter(href => href.endsWith('.md'))
-                .sort();
+            while ((match = mdFileRegex.exec(html)) !== null) {
+                // Use the text content (match[2]) as it's already decoded
+                links.push(match[2]);
+            }
             
-            return links;
+            // If no matches found, try alternative parsing
+            if (links.length === 0) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const extracted = Array.from(doc.querySelectorAll('a'))
+                    .map(a => a.textContent.trim())
+                    .filter(text => text.endsWith('.md'))
+                    .sort();
+                return extracted;
+            }
+            
+            return links.sort();
         } catch (error) {
             console.warn('Could not auto-detect posts folder via directory listing:', error);
             console.log('Attempting to load from posts.json as fallback...');
