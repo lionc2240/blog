@@ -31,15 +31,12 @@ Because the blog fetches post files using JavaScript, you need to run it from a 
 
 ## How to Add a New Post
 
-1.  Create a new Markdown file (e.g., `my-new-post.md`) inside the `posts/` directory.
-2.  Open `app.js` and add the filename to the `posts` array at the top of the file:
-    ```javascript
-    const posts = [
-        'sample-post.md',
-        'my-new-post.md' // Add your new post here
-    ];
+1.  **Add your file:** Create a new Markdown file (e.g., `my-new-post.md`) inside the `posts/` directory.
+2.  **Update the post list:** Run the build script from your terminal to automatically find your new post and add it to the list.
+    ```bash
+    node build.js
     ```
-3.  Refresh your browser. Your new post will appear in the navigation list.
+3.  **Refresh your browser.** Your new post will appear in the navigation list.
 
 ## Project Structure
 

@@ -3,13 +3,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const postContent = document.getElementById('post-content');
     const tocContainer = document.getElementById('toc-container');
 
-    // In a real static site generator, this would be dynamically generated.
-    // For this simple version, we'll hardcode the post names.
-    const posts = [
-        'sample-post.md'
-    ];
+    async function main() {
+        try {
+            const response = await fetch('posts.json');
+            if (!response.ok) {
+                throw new Error('Could not load post list.');
+            }
+            const posts = await response.json();
+            
+            renderPostList(posts);
 
-    function renderPostList() {
+            // Load post from URL hash if present, otherwise load the first post
+            const postFromHash = window.location.hash.substring(1);
+            if (postFromHash && posts.includes(postFromHash)) {
+                loadPost(postFromHash);
+            } else if (posts.length > 0) {
+                loadPost(posts[0]);
+            }
+        } catch (error) {
+            console.error('Error initializing blog:', error);
+            postList.innerHTML = '<h2>Error</h2><p>Could not load posts.</p>';
+        }
+    }
+
+    function renderPostList(posts) {
         const list = document.createElement('ul');
         posts.forEach(post => {
             const listItem = document.createElement('li');
@@ -102,13 +119,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initial load
-    renderPostList();
-
-    // Load post from URL hash if present, otherwise load the first post
-    const postFromHash = window.location.hash.substring(1);
-    if (postFromHash && posts.includes(postFromHash)) {
-        loadPost(postFromHash);
-    } else if (posts.length > 0) {
-        loadPost(posts[0]);
-    }
+    main();
 });
