@@ -5,17 +5,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function main() {
         try {
-            const response = await fetch('posts.json');
-            if (!response.ok) {
-                throw new Error('Could not load post list.');
+            // Dynamically scan the posts folder
+            const posts = await scanPostsFolder();
+            
+            if (posts.length === 0) {
+                postList.innerHTML = '<h2>Posts</h2><p>No markdown files found in the posts folder.</p>';
+                return;
             }
-            const posts = await response.json();
             
             renderPostList(posts);
 
             // Load post from URL hash if present, otherwise load the first post
             const postFromHash = window.location.hash.substring(1);
-            if (postFromHash && posts.includes(postFromHash)) {
+            if (postFromHash && posts.some(p => p === postFromHash)) {
                 loadPost(postFromHash);
             } else if (posts.length > 0) {
                 loadPost(posts[0]);
@@ -23,6 +25,45 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error initializing blog:', error);
             postList.innerHTML = '<h2>Error</h2><p>Could not load posts.</p>';
+        }
+    }
+
+    async function scanPostsFolder() {
+        try {
+            // Try to fetch directory listing from posts folder
+            const response = await fetch('posts/');
+            if (!response.ok) {
+                throw new Error('Could not access posts folder.');
+            }
+            
+            const html = await response.text();
+            
+            // Parse HTML to extract markdown files
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // Look for links to .md files
+            const links = Array.from(doc.querySelectorAll('a'))
+                .map(a => a.textContent || a.href)
+                .filter(href => href.endsWith('.md'))
+                .sort();
+            
+            return links;
+        } catch (error) {
+            console.warn('Could not auto-detect posts folder via directory listing:', error);
+            console.log('Attempting to load from posts.json as fallback...');
+            
+            // Fallback to posts.json if directory listing fails
+            try {
+                const response = await fetch('posts.json');
+                if (response.ok) {
+                    return await response.json();
+                }
+            } catch (e) {
+                console.error('posts.json fallback also failed:', e);
+            }
+            
+            return [];
         }
     }
 
