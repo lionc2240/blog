@@ -1,46 +1,75 @@
 # My Simple Markdown Blog
 
-This is a simple, static blog that renders Markdown files into HTML.
+A lightweight, static markdown previewer that automatically discovers and displays markdown files from your `posts/` folder. No database required, just pure HTML, CSS, and JavaScript.
 
 ## Features
 
-- Renders Markdown posts with syntax highlighting.
-- Generates a Table of Contents for each post.
-- Provides a "Copy Markdown" button.
-- Clean, modern, and responsive design.
+✨ **Auto-Discovery**: Automatically scans the `posts/` folder and displays all markdown files  
+🎨 **Syntax Highlighting**: Beautiful code block highlighting with highlight.js  
+📑 **Table of Contents**: Auto-generated TOC for each post with clickable links  
+📋 **Copy Markdown**: One-click copy button to get the raw markdown  
+📱 **Responsive Design**: Works seamlessly on desktop and mobile  
+⚡ **Zero Build Required**: No compile step needed - just create a `.md` file and it appears!
 
 ## How to Run
 
-Because the blog fetches post files using JavaScript, you need to run it from a local web server to avoid browser security errors (CORS issues).
+The blog requires a local web server to avoid CORS issues when loading markdown files.
 
-1.  **Make sure you have Python installed.** Most systems have it pre-installed.
+1. **Have Python installed** (comes pre-installed on most systems)
 
-2.  **Start a simple web server.** Open your terminal in the root directory of this project and run one of the following commands:
+2. **Start a web server** in the project root directory:
 
-    For Python 3:
-    ```bash
-    python3 -m http.server
-    ```
+   ```bash
+   # Python 3
+   python3 -m http.server 8000
+   ```
 
-    For Python 2:
-    ```bash
-    python -m SimpleHTTPServer
-    ```
-
-3.  **Open the blog in your browser.** Navigate to `http://localhost:8000`.
+3. **Open in your browser**: Navigate to `http://localhost:8000`
 
 ## How to Add a New Post
 
-1.  **Add your file:** Create a new Markdown file (e.g., `my-new-post.md`) inside the `posts/` directory.
-2.  **Update the post list:** Run the build script from your terminal to automatically find your new post and add it to the list.
-    ```bash
-    node build.js
-    ```
-3.  **Refresh your browser.** Your new post will appear in the navigation list.
+It's simple! Just create a new markdown file in the `posts/` folder:
+
+```bash
+# Example: create a new post
+echo "# My New Post\n\nContent here..." > posts/my-new-post.md
+```
+
+Then:
+1. Refresh your browser
+2. Your new post will automatically appear in the sidebar
+3. Click to view it!
 
 ## Project Structure
 
-- `index.html`: The main HTML file.
-- `style.css`: Contains all the styles for the blog.
-- `app.js`: The core JavaScript file that handles post loading, Markdown rendering, and other dynamic features.
-- `posts/`: This directory contains all your blog posts in Markdown format.
+```
+blog/
+├── index.html          # Main HTML file
+├── app.js             # Core JavaScript (dynamic scanning & rendering)
+├── style.css          # All styling
+├── posts/             # Your markdown files go here
+│   ├── sample-post.md
+│   ├── another-sample.md
+│   └── ...
+├── README.md          # This file
+├── REQUIREMENTS.md    # Project requirements
+└── GEMINI.md         # Implementation guidelines
+```
+
+## How It Works
+
+1. **Automatic Folder Scanning**: On page load, the app fetches the `posts/` directory listing
+2. **Dynamic Post List**: All `.md` files are parsed and displayed in the left sidebar
+3. **Click to Preview**: Click any post to load and render it as HTML
+4. **No posts.json Needed**: The app automatically detects new posts without manual updates
+
+## Browser Support
+
+Works in all modern browsers that support:
+- Fetch API
+- ES6 JavaScript
+- CSS Grid/Flexbox
+
+## License
+
+Feel free to use and modify as you wish!
