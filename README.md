@@ -51,9 +51,31 @@ blog/
 │   ├── sample-post.md
 │   ├── another-sample.md
 │   └── ...
+├── images/            # Images for your posts
+│   ├── photo1.jpg
+│   └── ...
 ├── README.md          # This file
 ├── REQUIREMENTS.md    # Project requirements
 └── GEMINI.md         # Implementation guidelines
+```
+
+## Adding Images to Posts
+
+Store your images in the `images/` folder and reference them in your markdown files:
+
+```markdown
+![Description](../images/my-image.jpg)
+```
+
+**Example:**
+```markdown
+# My Post
+
+This is my post with an image:
+
+![Beautiful Sunset](../images/sunset.jpg)
+
+And some more text...
 ```
 
 ## How It Works
