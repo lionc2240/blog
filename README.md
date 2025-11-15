@@ -95,3 +95,27 @@ Works in all modern browsers that support:
 ## License
 
 Feel free to use and modify as you wish!
+
+## Deploying to Netlify
+
+This site is static and works well on Netlify. Recommended config files are included: `netlify.toml`, `_redirects`, and `_headers`.
+
+Quick steps:
+
+1. Push the repository to GitHub (or any Git provider supported by Netlify).
+2. Sign in to Netlify and choose "New site from Git" → connect your repo.
+3. In Netlify site settings set:
+    - **Build command**: leave empty (no build needed) or set to your build command if you add a build step.
+    - **Publish directory**: `/` (the repository root, where `index.html` lives).
+4. Deploy the site.
+
+Notes and important details:
+- The repo currently contains an `images/` folder that you may have added images to locally. If `images/` is included in `.gitignore` (so images are not committed to the repo), Netlify will not have those images after deploy. To include images in your deployed site either:
+   - Commit the images to the repo (remove `images/` from `.gitignore`), or
+   - Host images on an external CDN or image host and reference them by full URL in your Markdown.
+- The `_redirects` and `netlify.toml` files include a rule that redirects all paths to `index.html` so client-side navigation works.
+- `_headers` includes basic security and caching headers; adjust them as needed for your project.
+
+If you want, I can:
+- Remove `images/` from `.gitignore` and add a small `images/` index UI so you can pick images from the editor, or
+- Keep `images/` ignored and help you implement an image hosting workflow (Cloudinary, Imgur, or GitHub releases).

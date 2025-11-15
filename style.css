@@ -107,3 +107,44 @@ img {
 #copy-button:hover {
     background-color: #0056b3;
 }
+
+/* Editor pane */
+.editor-pane.hidden { display: none; }
+.editor-pane {
+    position: fixed;
+    inset: 30px;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+.editor-inner {
+    width: 90%;
+    max-width: 1100px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.editor-inner header {
+    display:flex;
+    gap:10px;
+    padding:12px;
+}
+.editor-inner header input {
+    flex:1;
+    padding:8px 10px;
+}
+.editor-controls { padding: 10px; display:flex; gap:8px; align-items:center; }
+.editor-body { display:flex; gap:10px; padding:10px; }
+#editor-text { flex:1; padding:10px; font-family: monospace; }
+.editor-preview { flex:1; padding:10px; border-left:1px solid #eee; overflow:auto; background:#fafafa }
+
+/* Dark mode */
+body.dark { background-color: #0e0f12; color: #e6eef8; }
+body.dark .container { background:#111318; box-shadow: none; }
+body.dark .sidebar, body.dark .content, body.dark .editor-inner { background: #111318; color: #e6eef8; border-color: #222; }
+body.dark a { color: #7fb6ff; }
+body.dark pre { background:#111318; color:#e6eef8 }
+body.dark .editor-preview { background:#0b0c0f }

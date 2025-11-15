@@ -6,15 +6,49 @@
     <title>My Simple Blog</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.css">
 </head>
 <body>
     <div class="container">
-        <nav id="post-list" class="sidebar"></nav>
+        <nav id="post-list" class="sidebar">
+            <div class="sidebar-header">
+                <input id="search-input" placeholder="Search posts..." />
+                <div class="sidebar-actions">
+                    <button id="new-post">New Post</button>
+                    <button id="toggle-theme">Toggle Theme</button>
+                </div>
+            </div>
+        </nav>
         <main id="post-content" class="content"></main>
         <aside id="toc-container" class="sidebar"></aside>
     </div>
+    
+    <!-- Editor pane (hidden by default) -->
+    <div id="editor-pane" class="editor-pane hidden">
+        <div class="editor-inner">
+            <header>
+                <input id="editor-title" placeholder="Post title" />
+                <input id="editor-tags" placeholder="tags (comma separated)" />
+                <input id="editor-date" type="date" />
+            </header>
+
+            <div class="editor-controls">
+                <div class="editor-note">Images should be placed into the `images/` folder and referenced as `../images/your-file.jpg` in markdown.</div>
+                <button id="download-md">Download .md</button>
+                <button id="save-github">Save to GitHub</button>
+                <button id="close-editor">Close</button>
+            </div>
+
+            <div class="editor-body">
+                <textarea id="editor-text" rows="20"></textarea>
+                <div id="editor-preview" class="editor-preview"></div>
+            </div>
+        </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.2.2/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://unpkg.com/lunr/lunr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

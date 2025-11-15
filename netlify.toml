@@ -1,0 +1,10 @@
+[build]
+  publish = "."
+  command = ""
+
+# Redirect everything to index.html so client-side routing (if used) works.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = true
