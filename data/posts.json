@@ -1,5 +1,13 @@
 [
   {
+    "id": "remote-unlock-camera",
+    "title": "Tự động hóa mở khóa Pattern và Điều khiển Camera từ xa qua Termux",
+    "date": "2026-05-04",
+    "tags": ["Automation", "ADB", "Termux", "Security"],
+    "excerpt": "Hướng dẫn cách vượt qua màn hình khóa Pattern và điều khiển Camera điện thoại từ xa bằng lệnh Shell thông qua Termux và Shizuku.",
+    "file": "remote-unlock-camera.md"
+  },
+  {
     "id": "scp-remote-transfer",
     "title": "Lấy file từ điện thoại về máy tính từ xa qua SCP & Termux",
     "date": "2026-05-04",
