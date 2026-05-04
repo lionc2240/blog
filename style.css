@@ -400,11 +400,31 @@ body {
 
 /* Footer */
 .footer {
-    padding: 2rem 0;
+    padding: 3rem 0;
     text-align: center;
     color: var(--text-secondary);
     font-size: 0.9rem;
     border-top: 1px solid var(--surface-border);
+}
+
+.footer-links {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.youtube-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.youtube-link:hover {
+    color: #ff0000; /* YouTube Red */
 }
 
 /* Skeletons & Loading */
