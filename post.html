@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài viết - My Personal Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Marked.js for parsing markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- DOMPurify to sanitize HTML from marked (best practice) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+</head>
+<body class="post-page">
+    <div class="background-effects">
+        <div class="glow glow-1"></div>
+    </div>
+    
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">✨</span>
+                <span class="logo-text">MyBlog</span>
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="#" class="nav-link">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="post-article">
+            <a href="index.html" class="back-link">← Quay lại trang chủ</a>
+            <div id="post-header" class="post-header-info">
+                <!-- Post header will be injected here -->
+                <h1 class="skeleton skeleton-title"></h1>
+                <div class="skeleton skeleton-text"></div>
+            </div>
+            <div id="post-content" class="markdown-body">
+                <!-- Post content will be injected here -->
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text"></div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section" style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--surface-border);">
+                <h3 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Bình luận & Góp ý</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Nếu bài viết đã cũ hoặc có sai sót, vui lòng để lại bình luận bên dưới để mình cập nhật nhé!</p>
+                
+                <!-- Giscus Script (Placeholder) -->
+                <script src="https://giscus.app/client.js"
+                        data-repo="[TEN_GITHUB_CUA_BAN]/[TEN_REPO_CUA_BAN]"
+                        data-repo-id="[REPO_ID]"
+                        data-category="Announcements"
+                        data-category-id="[CATEGORY_ID]"
+                        data-mapping="pathname"
+                        data-strict="0"
+                        data-reactions-enabled="1"
+                        data-emit-metadata="0"
+                        data-input-position="bottom"
+                        data-theme="transparent_dark"
+                        data-lang="vi"
+                        crossorigin="anonymous"
+                        async>
+                </script>
+                <div class="giscus"></div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 1rem; font-style: italic;">
+                    * Lưu ý: Để tính năng bình luận hoạt động, bạn cần cấu hình <a href="https://giscus.app/vi" target="_blank" style="color: var(--accent-color);">Giscus</a> và cập nhật các thông số data-repo, data-repo-id trong file post.html.
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 MyBlog. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

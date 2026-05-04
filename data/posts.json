@@ -1,0 +1,18 @@
+[
+  {
+    "id": "termux-shizuku-control",
+    "title": "Kết nối Terminal với Shizuku: Điều khiển Android toàn năng qua Termux",
+    "date": "2026-05-04",
+    "tags": ["Termux", "Shizuku", "Android"],
+    "excerpt": "Hướng dẫn chi tiết cách kết nối Termux với Shizuku để thực thi các lệnh ADB và kiểm soát thiết bị Android mà không cần Root.",
+    "file": "termux-shizuku.md"
+  },
+  {
+    "id": "wol-tailscale-termux",
+    "title": "Thiết lập Wake on LAN (WOL) từ xa với Tailscale + Termux",
+    "date": "2026-05-03",
+    "tags": ["Networking", "Tailscale", "Termux"],
+    "excerpt": "Cách bật máy tính tại nhà khi bạn đang ở ngoài đường, sử dụng điện thoại phụ chạy Termux và mạng riêng ảo Tailscale.",
+    "file": "wol-tailscale.md"
+  }
+]
