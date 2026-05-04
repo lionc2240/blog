@@ -1,6 +1,6 @@
 # Kết nối Terminal với Shizuku: Điều khiển Android toàn năng qua Termux
 
-> [!TIP]
+> [TIP]
 > Sẽ nhanh hơn nếu bạn đã thiết lập SSH với PC/ Laptop, nếu chưa thiết lập, bạn có thể xem hướng dẫn [tại đây](#).
 
 Bài viết này là note lại cách mình setup kết nối giữa **Termux** và **Shizuku**. Rất hữu ích khi cần chạy các lệnh ADB trên Android mà không có quyền Root.
@@ -8,8 +8,8 @@ Bài viết này là note lại cách mình setup kết nối giữa **Termux** 
 ## 1. Yêu cầu chuẩn bị
 
 - Ứng dụng **Termux** cài đặt từ [F-Droid](https://f-droid.org/packages/com.termux/) (0.119.0-beta.3)
-- Ứng dụng **Shizuku** cài đặt từ [Github Releases](https://github.com/RikkaApps/Shizuku/releases) (v13.6.0)
-- Điện thoại đã bật tuỳ chọn nhà phát triển (Developer Options) và Wireless Debugging.
+- Ứng dụng **Shizuku** cài đặt từ [Github Releases](https://github.com/RikkaApps/Shizuku/releases) (v13.6.0) (Nếu chưa cài đặt, hãy xem [hướng dẫn Cài đặt và Chạy Shizuku trên Android 12 tại đây](https://www.youtube.com/shorts/PPUwXPDwddU "How to Install and Run Shizuku on Android 12"))
+- Điện thoại đã bật Tuỳ chọn nhà phát triển (Developer Options) và Wireless Debugging.
 
 ## 2. Các bước thực hiện
 
