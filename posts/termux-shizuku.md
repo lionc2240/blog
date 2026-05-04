@@ -89,14 +89,6 @@ Từ ứng dụng Shizuku, chọn **Use rish in Terminal** -> **Export rish file
 
    Nếu dấu nhắc lệnh thay đổi thành kí tự khác (ví dụ `beyond0:/ $`), thì bạn đã thành công.
 
-### Bước 4: Chạy lệnh ADB
-
-Bây giờ bạn có thể dùng lệnh `rish` để chạy lệnh như ADB shell:
-
-```bash
-rish sh -c "pm list packages"
-```
-
 ---
 
 **Lưu ý:** Bài viết được viết vào năm 2026. Nếu bạn thấy có thay đổi mới từ các bản cập nhật của Termux hoặc Shizuku, hãy để lại comment phía dưới nhé!
