@@ -21,22 +21,22 @@ Thay vì nút Nguồn (có thể làm tắt màn hình nếu nó đang bật), h
 
 ### Bước 2: Vuốt để hiện bảng vẽ Pattern
 ```bash
-# Vuốt từ dưới lên
-./rish -c "input swipe 540 2000 540 1000 150"
+# Vuốt từ dưới lên (X1 Y1 là điểm bắt đầu, X1 Y2 là điểm kết thúc)
+./rish -c "input swipe X1 Y1 X1 Y2 150"
 ```
 
 ### Bước 3: Vẽ hình Pattern liên tục
-Sử dụng tọa độ lấy từ **Pointer Location** trong Cài đặt nhà phát triển. Dưới đây là ví dụ cho một hình Pattern lắt léo trên S10e:
+Sử dụng tọa độ lấy từ **Pointer Location** trong Cài đặt nhà phát triển. Dưới đây là cấu trúc lệnh để vẽ một hình Pattern liên tục:
 
 ```bash
 # Gộp lệnh vào 1 lần gọi rish để tránh độ trễ
 ./rish -c "
- input motionevent down 291 1248;
- input motionevent move 532 1545;
- input motionevent move 792 1821;
- input motionevent move 777 1545;
- input motionevent move 545 1796;
- input motionevent up 545 1796;
+ input motionevent down X1 Y1;
+ input motionevent move X2 Y2;
+ input motionevent move X3 Y3;
+ input motionevent move X4 Y4;
+ input motionevent move X5 Y5;
+ input motionevent up X5 Y5;
 "
 ```
 
@@ -55,10 +55,10 @@ Nội dung file:
 ./rish -c "input keyevent 224"
 sleep 0.5
 # 2. Mo bang Pattern
-./rish -c "input swipe 540 2000 540 1000 150"
+./rish -c "input swipe X1 Y1 X1 Y2 150"
 sleep 0.3
-# 3. Ve Pattern
-./rish -c "input motionevent down 291 1248; input motionevent move 532 1545; input motionevent move 792 1821; input motionevent move 777 1545; input motionevent move 545 1796; input motionevent up 545 1796;"
+# 3. Ve Pattern (Thay các X Y bang toa do thuc te cua ban)
+./rish -c "input motionevent down X1 Y1; input motionevent move X2 Y2; input motionevent move X3 Y3; input motionevent move X4 Y4; input motionevent move X5 Y5; input motionevent up X5 Y5;"
 ```
 
 Cấp quyền thực thi: `chmod +x unlock.sh`
@@ -87,4 +87,4 @@ termux-camera-photo -c 0 ~/remote_photo.jpg
 
 **Lưu ý an toàn:** Việc lưu tọa độ Pattern vào file script có thể gây rủi ro bảo mật nếu điện thoại rơi vào tay người lạ. Hãy cân nhắc bảo vệ file này hoặc sử dụng phương thức xóa dấu vết sau khi dùng.
 
-**Stay Hard!**
+**Chúc bạn thành công!**
