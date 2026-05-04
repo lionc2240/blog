@@ -208,6 +208,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 });
 
+                // Add copy buttons to code blocks (PRE tags)
+                const preBlocks = contentDiv.querySelectorAll('pre');
+                preBlocks.forEach(pre => {
+                    const btn = document.createElement('button');
+                    btn.className = 'code-copy-btn';
+                    btn.innerText = 'Copy';
+                    
+                    btn.addEventListener('click', async () => {
+                        const code = pre.querySelector('code');
+                        const textToCopy = code ? code.innerText : pre.innerText;
+                        
+                        await copyToClipboard(textToCopy, btn);
+                        btn.innerText = 'Copied!';
+                        setTimeout(() => btn.innerText = 'Copy', 2000);
+                    });
+                    
+                    pre.appendChild(btn);
+                });
+
             } else {
                 document.getElementById('post-content').innerHTML = '<p>Lỗi: Không thể tải thư viện hiển thị nội dung.</p>';
             }

@@ -1,7 +1,7 @@
 # Kết nối Terminal với Shizuku: Điều khiển Android toàn năng qua Termux
 
 > [!TIP]
-> Sẽ nhanh hơn nếu bạn đã thiết lập SSH với PC/ Laptop, nếu chưa thiết lập, bạn có thể xem hướng dẫn [tại đây](#) (Hãy thay bằng link bài viết hướng dẫn SSH của bạn).
+> Sẽ nhanh hơn nếu bạn đã thiết lập SSH với PC/ Laptop, nếu chưa thiết lập, bạn có thể xem hướng dẫn [tại đây](#).
 
 Bài viết này là note lại cách mình setup kết nối giữa **Termux** và **Shizuku**. Rất hữu ích khi cần chạy các lệnh ADB trên Android mà không có quyền Root.
 
@@ -48,13 +48,11 @@ Từ ứng dụng Shizuku, chọn **Use rish in Terminal** -> **Export rish file
    nano rish
    ```
 
-   Tại phần
+   Thay `PKG` tại dòng `[ -z "$RISH...` thành `com.termux`. Sau đó lưu lại bằng tổ hợp Ctrl + X, Y, Enter.
 
    ```bash
-   [ -z "$RISH_APPLICATION_ID" ] && export RISH_APPLICATION_ID="PKG"
+   [ -z "$RISH_APPLICATION_ID" ] && export RISH_APPLICATION_ID="com.termux"
    ```
-
-   Thay dòng `PKG` thành `com.termux`. Sau đó lưu lại bằng tổ hợp Ctrl + X, Y, Enter.
 4. Cấp quyền thực thi
 
    ```bash
@@ -79,7 +77,10 @@ Từ ứng dụng Shizuku, chọn **Use rish in Terminal** -> **Export rish file
    source .bashrc # hoặc .zshrc
    ```
 
-   Từ giờ mỗi khi gõ `rish` , Termux sẽ tự hiểu là bạn đang gọi lệnh `./rish`
+   Từ giờ mỗi khi gõ `rish` , Termux sẽ tự hiểu là bạn đang gọi lệnh `./rish
+
+   > Trong một số trường hợp, ví dụ như sử dụng Gemini CLI, bạn vẫn sẽ phải gõ đầy đủ lệnh  `./rish` để lệnh shell chạy đúng.
+   >
 
    Bạn có thể thử gõ:
 
@@ -88,6 +89,41 @@ Từ ứng dụng Shizuku, chọn **Use rish in Terminal** -> **Export rish file
    ```
 
    Nếu dấu nhắc lệnh thay đổi thành kí tự khác (ví dụ `beyond0:/ $`), thì bạn đã thành công.
+   Để thoát ra trở lại dấu nhắc lệnh ban đầu, bạn gõ `exit` rồi Enter.
+
+### Bước 4: Chạy lệnh ADB
+
+Bây giờ bạn đã có thể thực thi các lệnh ADB shell trực tiếp trên điện thoại thông qua Termux. Một số ví dụ bạn có thể thử:
+
+**1. Liệt kê các ứng dụng hệ thống:**
+
+```bash
+rish -c "pm list packages -s"
+```
+
+**2. Chụp ảnh màn hình và lưu vào máy:**
+
+```bash
+rish -c "screencap -p /sdcard/Download/screen.png"
+```
+
+**3. Xem thông tin chi tiết về Pin:**
+
+```bash
+rish -c "dumpsys battery"
+```
+
+**4. Buộc dừng một ứng dụng (Ví dụ Facebook):**
+
+```bash
+rish -c "am force-stop com.facebook.katana"
+```
+
+**5. Mở một URL trên trình duyệt:**
+
+```bash
+rish -c "am start -a android.intent.action.VIEW -d https://www.youtube.com/@hoanggo101"
+```
 
 ---
 

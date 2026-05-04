@@ -390,6 +390,34 @@ body {
     overflow-x: auto;
     margin-bottom: 1.5rem;
     border: 1px solid var(--surface-border);
+    position: relative; /* Added for absolute positioning of copy button */
+}
+
+/* Code Copy Button */
+.code-copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: var(--transition);
+    opacity: 0;
+    z-index: 10;
+}
+
+.markdown-body pre:hover .code-copy-btn {
+    opacity: 1;
+}
+
+.code-copy-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
 }
 
 .markdown-body pre code {
