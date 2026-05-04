@@ -16,6 +16,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Scroll to Top & Smart Navbar Logic
+    const scrollTopBtn = document.createElement('button');
+    scrollTopBtn.className = 'scroll-top-btn';
+    scrollTopBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>';
+    document.body.appendChild(scrollTopBtn);
+
+    const header = document.querySelector('.header');
+    let lastScrollY = window.scrollY;
+
+    window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+
+        // Smart Navbar logic
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            header.classList.add('header-hidden');
+        } else {
+            header.classList.remove('header-hidden');
+        }
+
+        // Scroll to top button logic
+        if (currentScrollY > 300) {
+            scrollTopBtn.classList.add('visible');
+        } else {
+            scrollTopBtn.classList.remove('visible');
+        }
+
+        lastScrollY = currentScrollY;
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
     // Determine current page
     const isPostPage = document.body.classList.contains('post-page');
 
@@ -115,10 +148,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Setup Copy Article Markdown Button
             const postHeader = document.getElementById('post-header');
             const copyBtnHtml = `
-                <button id="copy-full-md" class="copy-md-btn" title="Copy toàn bộ bài viết dưới dạng Markdown">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    Copy Markdown
-                </button>
+                <div style="display: flex; justify-content: center;">
+                    <button id="copy-full-md" class="copy-md-btn" title="Copy Markdown">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copy as Markdown
+                    </button>
+                </div>
             `;
             postHeader.insertAdjacentHTML('beforeend', copyBtnHtml);
             
@@ -139,42 +174,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     htmlContent = DOMPurify.sanitize(htmlContent);
                 }
                 document.getElementById('post-content').innerHTML = htmlContent;
+                document.getElementById('post-content').classList.add('loaded');
                 
                 if (typeof Prism !== 'undefined') {
                     Prism.highlightAll();
                 }
 
-                // Add copy buttons to headings (H2, H3)
+                // Add anchor links and copy buttons to headings (H2, H3)
                 const contentDiv = document.getElementById('post-content');
                 const headings = contentDiv.querySelectorAll('h2, h3');
                 
                 headings.forEach(heading => {
-                    // Create copy section button
-                    const btn = document.createElement('button');
-                    btn.className = 'copy-section-btn';
-                    btn.title = 'Copy chương này (Markdown)';
-                    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
-                    
-                    // Add click event
-                    btn.addEventListener('click', async () => {
-                        const headingText = heading.innerText;
-                        const sectionMd = extractMarkdownSection(mdContent, headingText);
-                        
-                        if (sectionMd) {
-                            // Ensure section link has an ID
-                            if (!heading.id) {
-                                heading.id = headingText.toLowerCase().replace(/[^\w]+/g, '-');
-                            }
-                            const sectionUrl = new URL(window.location.href);
-                            sectionUrl.hash = heading.id;
-                            
-                            const sourceText = `\n\n> Nguồn: [${headingText}](${sectionUrl.toString()})`;
-                            await copyToClipboard(sectionMd + sourceText, btn);
+                    const headingText = heading.innerText;
+                    if (!heading.id) {
+                        heading.id = headingText.toLowerCase().replace(/[^\w]+/g, '-');
+                    }
+
+                    // Prepend Anchor Link (#)
+                    const anchor = document.createElement('a');
+                    anchor.href = `#${heading.id}`;
+                    anchor.className = 'anchor-link';
+                    anchor.innerText = '#';
+
+                    heading.prepend(anchor);
+                    heading.style.position = 'relative';
+
+                    // Make the heading itself clickable to update URL hash
+                    heading.addEventListener('click', (e) => {
+                        // Avoid triggering if the click was specifically on the anchor link (which already handles it)
+                        if (e.target !== anchor) {
+                            window.location.hash = heading.id;
                         }
                     });
-
-                    heading.appendChild(btn);
-                    heading.style.position = 'relative'; // Ensure button positioning works if needed
                 });
 
             } else {

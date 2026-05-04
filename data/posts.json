@@ -1,5 +1,13 @@
 [
   {
+    "id": "scp-remote-transfer",
+    "title": "Lấy file từ điện thoại về máy tính từ xa qua SCP & Termux",
+    "date": "2026-05-04",
+    "tags": ["SCP", "SSH", "Termux", "Remote"],
+    "excerpt": "Hướng dẫn sử dụng lệnh SCP để sao chép file từ điện thoại Android về máy tính từ xa một cách nhanh chóng và an toàn.",
+    "file": "scp-remote-transfer.md"
+  },
+  {
     "id": "termux-shizuku-control",
     "title": "Kết nối Terminal với Shizuku: Điều khiển Android toàn năng qua Termux",
     "date": "2026-05-04",
