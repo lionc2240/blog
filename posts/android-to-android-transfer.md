@@ -1,59 +1,65 @@
 # Hướng dẫn truyền file giữa hai thiết bị Android qua Termux bằng SCP
 
-Bạn có hai chiếc điện thoại Android và muốn chuyển một file dung lượng lớn hoặc hàng loạt ảnh mà không muốn dùng qua Cloud hay các ứng dụng bên thứ ba chậm chạp? Nếu bạn đã quen thuộc với **Termux**, việc sử dụng lệnh **SCP** (Secure Copy) là cách nhanh chóng, an toàn và chuyên nghiệp nhất.
+Bạn có hai chiếc điện thoại Android và muốn chuyển một file dung lượng lớn hoặc hàng loạt ảnh mà không muốn dùng qua Cloud? Sử dụng lệnh **SCP** (Secure Copy) qua **Termux** là cách nhanh chóng, an toàn và chuyên nghiệp nhất.
 
-## 1. Yêu cầu chuẩn bị
+## 1. Điều kiện cần chuẩn bị (Conditions)
 
 Để thực hiện, cả hai thiết bị Android đều cần:
 - Đã cài đặt ứng dụng **Termux**.
-- Đã cài đặt gói OpenSSH: `pkg install openssh`.
-- Đã thiết lập mật khẩu cho Termux (để xác thực khi truyền file): `passwd`.
-- Đã bật dịch vụ SSH: `sshd`.
+- Đã cài đặt ứng dụng **Tailscale** (nếu muốn truyền file khi không cùng mạng Wi-Fi).
+- Đã cấp quyền truy cập bộ nhớ cho Termux bằng lệnh: `termux-setup-storage`.
 
-## 2. Xác định địa chỉ IP của thiết bị NHẬN
+## 2. Cài đặt môi trường (Installation)
 
-Thiết bị nhận file cần cung cấp địa chỉ IP cho thiết bị gửi. Tùy vào môi trường mạng, bạn có hai cách:
+Trên cả hai thiết bị, hãy mở Termux và thực hiện các bước sau:
 
-### Cách 1: Trong cùng mạng Wi-Fi (Local IP)
-Mở Termux trên máy nhận và gõ:
+1. **Cài đặt OpenSSH:**
+   ```bash
+   pkg update && pkg install openssh
+   ```
+2. **Thiết lập mật khẩu:** (Dùng để xác thực khi máy kia kết nối tới)
+   ```bash
+   passwd
+   ```
+3. **Bật dịch vụ SSH:**
+   ```bash
+   sshd
+   ```
+
+## 3. Cách thực hiện truyền file (How to use)
+
+### Bước 1: Xác định địa chỉ IP của thiết bị NHẬN
+
+Thiết bị nhận file cần cung cấp địa chỉ IP cho thiết bị gửi:
+
+- **Nếu dùng chung mạng Wi-Fi (Local IP):** 
+  Gõ `ifconfig` trong Termux, tìm dòng `inet` trong mục `wlan0` (thường là `192.168.1.x`).
+- **Nếu dùng Tailscale (Khác mạng/Từ xa):**
+  Mở **app Tailscale** trên Android, nhấn vào thiết bị hiện tại và sao chép địa chỉ IP (thường bắt đầu bằng `100.x.y.z`).
+  *(Lưu ý: Lệnh `tailscale ip` trong Termux sẽ không chạy trừ khi bạn cài đặt bản tailscale-linux, nên dùng app Android cho đơn giản).*
+
+### Bước 2: Thực hiện lệnh gửi file
+
+Trên thiết bị **GỬI**, sử dụng lệnh `scp` theo cú pháp:
+
 ```bash
-ifconfig
+scp -P 8022 [đường_dẫn_file] [ip_máy_nhận]:[đường_dẫn_đích]
 ```
-Tìm dòng `inet` trong mục `wlan0`. Thường nó sẽ có dạng `192.168.1.x`.
 
-### Cách 2: Khác mạng Wi-Fi (Dùng Tailscale)
-Nếu hai máy không ở gần nhau, hãy cài đặt **Tailscale** trên cả hai. Trên máy nhận, gõ:
+**Ví dụ thực tế:**
+Gửi file ảnh `landscape.jpg` sang máy nhận có IP Tailscale là `100.1.2.3`:
 ```bash
-tailscale ip -4
-```
-Bạn sẽ nhận được một địa chỉ IP có dạng `100.x.y.z`. Đây là địa chỉ IP cố định giúp bạn kết nối từ bất cứ đâu.
-
-## 3. Cách thực hiện truyền file
-
-Trên thiết bị **GỬI**, sử dụng lệnh `scp` theo cú pháp sau:
-
-```bash
-scp -P 8022 [đường_dẫn_file_gửi] [user]@[ip_máy_nhận]:[đường_dẫn_đích]
+scp -P 8022 ~/storage/dcim/Camera/landscape.jpg 100.1.2.3:/sdcard/Download/
 ```
 
-### Ví dụ thực tế:
-Giả sử bạn muốn gửi file `video.mp4` trong thư mục Download sang máy nhận có IP Tailscale là `100.1.2.3`:
-
-```bash
-scp -P 8022 ~/storage/downloads/video.mp4 100.1.2.3:/sdcard/Download/
-```
-
-### Giải thích các tham số:
-- `-P 8022`: Cổng mặc định của Termux (P viết hoa).
-- `~/storage/downloads/video.mp4`: Đường dẫn file trên máy gửi.
-- `100.1.2.3`: IP của máy nhận (Local hoặc Tailscale).
-- `:/sdcard/Download/`: Thư mục bạn muốn lưu file trên máy nhận.
-
-## 4. Một số lưu ý quan trọng
-
-- **Truyền cả thư mục:** Thêm tham số `-r`. Ví dụ: `scp -P 8022 -r ./my_folder/ 100.1.2.3:/sdcard/`
-- **Lỗi Connection Refused:** Kiểm tra xem máy nhận đã gõ lệnh `sshd` chưa.
-- **Quyền truy cập bộ nhớ:** Đảm bảo bạn đã chạy `termux-setup-storage` trên cả hai máy để Termux có quyền đọc/ghi file vào bộ nhớ điện thoại.
+### Bước 3: Nhập mật khẩu
+Sau khi chạy lệnh, Termux sẽ yêu cầu nhập mật khẩu. Hãy nhập mật khẩu bạn đã thiết lập ở bước **Installation** (khi nhập sẽ không hiện ký tự, cứ gõ xong rồi Enter).
 
 ---
-*Hy vọng hướng dẫn này giúp bạn làm chủ việc quản lý file giữa các thiết bị Android một cách hiệu quả hơn!*
+## Một số lưu ý quan trọng
+- **Truyền cả thư mục:** Thêm tham số `-r`. Ví dụ: `scp -P 8022 -r ./my_folder/ 100.1.2.3:/sdcard/`
+- **Lỗi Connection Refused:** Kiểm tra xem máy nhận đã gõ lệnh `sshd` chưa.
+- **Tốc độ:** Truyền qua mạng Local (Wi-Fi) sẽ nhanh hơn rất nhiều so với truyền qua Tailscale nếu mạng 4G/5G yếu.
+
+---
+*Hy vọng hướng dẫn này giúp bạn truyền dữ liệu giữa các thiết bị Android một cách chuyên nghiệp hơn!*
