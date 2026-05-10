@@ -1,5 +1,13 @@
 [
   {
+    "id": "android-to-android-transfer",
+    "title": "Hướng dẫn truyền file giữa hai thiết bị Android qua Termux bằng SCP",
+    "date": "2026-05-10",
+    "tags": ["Android", "Termux", "SCP", "File Transfer"],
+    "excerpt": "Cách sử dụng SCP (Secure Copy) để chuyển dữ liệu nhanh chóng và an toàn giữa hai điện thoại Android thông qua ứng dụng Termux.",
+    "file": "android-to-android-transfer.md"
+  },
+  {
     "id": "remote-unlock-camera",
     "title": "Tự động hóa mở khóa Pattern và Điều khiển Camera từ xa qua Termux",
     "date": "2026-05-04",
