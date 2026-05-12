@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${postMeta.tags ? postMeta.tags.map(tag => `<span class="post-tag">${tag}</span>`).join('') : ''}
                 </div>
             `;
-            document.title = `${postMeta.title} - My Personal Blog`;
+            document.title = `${postMeta.title} - HgBlog`;
 
             // Fetch Markdown Content
             const mdResponse = await fetch(`posts/${postMeta.file}`);
