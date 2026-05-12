@@ -14,7 +14,7 @@ Chúng ta sẽ sử dụng bộ công cụ mạnh mẽ: **Termux**, **Scrcpy**, 
 *   **Thiết lập:** Đăng nhập cùng một tài khoản Gmail trên cả hai máy và nhấn **Connect**.
 *   **Ghi nhớ:** Mở app Tailscale trên S10e và chép lại địa chỉ IP (ví dụ: `100.x.y.z`). Đây là địa chỉ để chúng ta tìm thấy máy ở nhà từ bất cứ đâu.
 
-> *Xem thêm: [Cách thiết lập Wake-on-LAN qua Tailscale](wol-tailscale.md) nếu bạn muốn bật máy tính từ xa.*
+> *Xem thêm: [Cách thiết lập Wake-on-LAN qua Tailscale](post.html?id=wol-tailscale-termux) nếu bạn muốn bật máy tính từ xa.*
 
 ---
 
