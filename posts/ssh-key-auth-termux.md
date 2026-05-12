@@ -53,8 +53,10 @@ ssh user@ip_address -p port
 *Lưu ý: Với Termux, port mặc định là `8022`. Với Windows, port mặc định là `22`.*
 
 ### Mẹo nhỏ:
-Để kết nối nhanh hơn nữa, hãy tạo alias trong `.bashrc` hoặc `.zshrc`:
-```bash
-alias win='ssh user@192.168.1.x'
-```
-Chỉ cần gõ `win` là xong. Chúc các bạn làm việc hiệu quả ngay cả khi đang di chuyển!
+- **Kết nối nhanh bằng Alias:** Tạo alias trong `.bashrc` hoặc `.zshrc` để vào nhanh:
+  ```bash
+  alias win='ssh user@192.168.1.x'
+  ```
+- **Windows Terminal:** Nếu bạn ngồi máy tính, hãy dùng **Windows Terminal** để tạo các Profiles SSH. Bạn có thể mở nhiều tab Termux cùng lúc, copy-paste cực nhanh và gõ lệnh bằng bàn phím cơ thay vì màn hình cảm ứng.
+
+Chúc các bạn làm việc hiệu quả ngay cả khi đang di chuyển!
