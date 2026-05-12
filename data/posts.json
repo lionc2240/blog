@@ -9,10 +9,10 @@
   },
   {
     "id": "remote-control-s10e-oppo-a79",
-    "title": "Điều khiển Samsung S10e từ xa bằng Oppo A79: Giải pháp \"Máy trạm bỏ túi\"",
+    "title": "Điều khiển Android (S10e) từ xa bằng Android (Oppo A79): Giải pháp \"Máy trạm bỏ túi\"",
     "date": "2026-05-13",
     "tags": ["Termux", "Scrcpy", "Remote Control", "Android"],
-    "excerpt": "Biến chiếc Samsung S10e tại nhà thành máy trạm từ xa, điều khiển trực tiếp từ Oppo A79 qua Internet với độ trễ cực thấp.",
+    "excerpt": "Biến thiết bị Android (S10e) tại nhà thành máy trạm từ xa, điều khiển trực tiếp từ thiết bị Android khác (Oppo A79) qua Internet.",
     "file": "remote-control-s10e-oppo-a79.md"
   },
   {

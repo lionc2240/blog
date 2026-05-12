@@ -1,6 +1,6 @@
-# Điều khiển Samsung S10e từ xa bằng Oppo A79: Giải pháp "Máy trạm bỏ túi" với Termux & Scrcpy
+# Điều khiển Android (S10e) từ xa bằng Android (Oppo A79): Giải pháp "Máy trạm bỏ túi" với Termux & Scrcpy
 
-Bạn có một chiếc **Samsung S10e** để cố định tại nhà (cắm sạc 24/7) và một chiếc **Oppo A79** thường xuyên mang ra ngoài? Bài viết này sẽ hướng dẫn bạn cách biến S10e thành một máy trạm từ xa, giúp bạn làm việc hoặc xử lý tác vụ ngay trên màn hình Oppo thông qua Internet.
+Bạn có một thiết bị Android (Samsung S10e) để cố định tại nhà (cắm sạc 24/7) và một thiết bị Android khác (Oppo A79) thường xuyên mang ra ngoài? Bài viết này sẽ hướng dẫn bạn cách biến thiết bị Android (S10e) thành một máy trạm từ xa, giúp bạn làm việc hoặc xử lý tác vụ ngay trên màn hình thiết bị Android (Oppo) thông qua Internet.
 
 Chúng ta sẽ sử dụng bộ công cụ mạnh mẽ: **Termux**, **Scrcpy**, **Termux-X11** và **Tailscale**.
 
@@ -10,15 +10,15 @@ Chúng ta sẽ sử dụng bộ công cụ mạnh mẽ: **Termux**, **Scrcpy**, 
 
 Để điều khiển qua Internet (4G/Wi-Fi khác mạng), chúng ta cần một "đường ống" bảo mật nối giữa hai máy. **Tailscale** là lựa chọn số 1.
 
-*   **Cài đặt:** Cài Tailscale từ Play Store trên cả S10e và Oppo A79.
+*   **Cài đặt:** Cài Tailscale từ Play Store trên cả thiết bị Android (S10e) và thiết bị Android (Oppo A79).
 *   **Thiết lập:** Đăng nhập cùng một tài khoản Gmail trên cả hai máy và nhấn **Connect**.
-*   **Ghi nhớ:** Mở app Tailscale trên S10e và chép lại địa chỉ IP (ví dụ: `100.x.y.z`). Đây là địa chỉ để chúng ta tìm thấy máy ở nhà từ bất cứ đâu.
+*   **Ghi nhớ:** Mở app Tailscale trên thiết bị Android (S10e) và chép lại địa chỉ IP (ví dụ: `100.x.y.z`). Đây là địa chỉ để chúng ta tìm thấy máy ở nhà từ bất cứ đâu.
 
 > *Xem thêm: [Cách thiết lập Wake-on-LAN qua Tailscale](post.html?id=wol-tailscale-termux) nếu bạn muốn bật máy tính từ xa.*
 
 ---
 
-## 2. Cài đặt trên Samsung S10e (Máy trạm tại nhà)
+## 2. Cài đặt trên thiết bị Android (Samsung S10e) - Máy trạm tại nhà
 
 Mục tiêu là mở cổng kết nối ADB vĩnh viễn (port 5555).
 
@@ -30,13 +30,13 @@ Mục tiêu là mở cổng kết nối ADB vĩnh viễn (port 5555).
     adb connect localhost:[Port]
     adb tcpip 5555
     ```
-4.  Kiểm tra bằng lệnh `adb devices`, nếu thấy có `localhost:5555` là xong. Bây giờ S10e đã sẵn sàng chờ lệnh từ Oppo.
+4.  Kiểm tra bằng lệnh `adb devices`, nếu thấy có `localhost:5555` là xong. Bây giờ thiết bị Android (S10e) đã sẵn sàng chờ lệnh từ thiết bị Android (Oppo).
 
 ---
 
-## 3. Cài đặt trên Oppo A79 (Máy điều khiển)
+## 3. Cài đặt trên thiết bị Android (Oppo A79) - Máy điều khiển
 
-Trên Oppo, chúng ta cần môi trường để hiển thị màn hình của S10e.
+Trên thiết bị Android (Oppo), chúng ta cần môi trường để hiển thị màn hình của thiết bị Android (S10e).
 
 1.  **Cài đặt App:** 
     *   **Termux** (từ F-Droid).
@@ -45,19 +45,19 @@ Trên Oppo, chúng ta cần môi trường để hiển thị màn hình của S
     ```bash
     pkg update && pkg install x11-repo android-tools scrcpy termux-x11-nightly
     ```
-3.  **Tối ưu ColorOS:** Vào cài đặt Pin, chọn **Không tối ưu hóa** cho Termux và Termux-X11 để tránh bị ngắt kết nối giữa chừng.
+3.  **Tối ưu hệ điều hành:** (Ví dụ ColorOS trên Oppo) Vào cài đặt Pin, chọn **Không tối ưu hóa** cho Termux và Termux-X11 để tránh bị ngắt kết nối giữa chừng.
 
 ---
 
 ## 4. Thao tác điều khiển từ xa
 
-Mỗi khi bạn ở ngoài và muốn vào S10e:
+Mỗi khi bạn ở ngoài và muốn vào thiết bị Android (S10e):
 
 1.  Đảm bảo cả 2 máy đều đã bật **Tailscale**.
-2.  Mở app **Termux-X11** trên Oppo (để chạy nền).
-3.  Trong **Termux** trên Oppo, thực hiện chuỗi lệnh:
+2.  Mở app **Termux-X11** trên thiết bị Android (Oppo) (để chạy nền).
+3.  Trong **Termux** trên thiết bị Android (Oppo), thực hiện chuỗi lệnh:
     ```bash
-    # Kết nối tới IP Tailscale của S10e
+    # Kết nối tới IP Tailscale của thiết bị Android (S10e)
     adb connect 100.x.y.z:5555
 
     # Khởi động server hiển thị
@@ -72,8 +72,8 @@ Mỗi khi bạn ở ngoài và muốn vào S10e:
 
 ## 5. Ví dụ sử dụng
 
-*   **Làm việc:** Mở các ứng dụng ngân hàng, quản lý file hoặc check tin nhắn trên S10e mà không cần mang theo máy.
-*   **Chạy Tool:** Sử dụng sức mạnh của S10e để chạy các script Termux nặng mà không làm nóng máy Oppo đang cầm trên tay.
+*   **Làm việc:** Mở các ứng dụng ngân hàng, quản lý file hoặc check tin nhắn trên thiết bị Android (S10e) mà không cần mang theo máy.
+*   **Chạy Tool:** Sử dụng sức mạnh của thiết bị Android (S10e) để chạy các script Termux nặng mà không làm nóng thiết bị Android (Oppo) đang cầm trên tay.
 
 ---
 
