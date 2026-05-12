@@ -1,5 +1,13 @@
 [
   {
+    "id": "ssh-key-auth-termux",
+    "title": "Kết nối SSH không mật khẩu giữa Android và Windows/Android qua Termux",
+    "date": "2026-05-13",
+    "tags": ["SSH", "Termux", "Remote Control", "Android", "Windows"],
+    "excerpt": "Hướng dẫn thiết lập SSH Key (id_rsa.pub & authorized_keys) để điều khiển từ xa nhanh chóng, bảo mật và không cần nhập mật khẩu giữa các thiết bị.",
+    "file": "ssh-key-auth-termux.md"
+  },
+  {
     "id": "remote-control-s10e-oppo-a79",
     "title": "Điều khiển Samsung S10e từ xa bằng Oppo A79: Giải pháp \"Máy trạm bỏ túi\"",
     "date": "2026-05-13",
