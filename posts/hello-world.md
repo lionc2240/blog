@@ -12,7 +12,7 @@ Blog này được thiết kế để:
 ```javascript
 // app.js
 function sayHello() {
-    console.log("Hello World from MyBlog!");
+    console.log("Hello World from HgBlog!");
 }
 sayHello();
 ```
