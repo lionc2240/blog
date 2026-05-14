@@ -1,5 +1,13 @@
 [
   {
+    "id": "adb-tailscale-remote",
+    "title": "Kết nối ADB từ xa mọi nơi với Tailscale: Điều khiển Android không giới hạn khoảng cách",
+    "date": "2026-05-14",
+    "tags": ["ADB", "Tailscale", "Remote", "Android"],
+    "excerpt": "Hướng dẫn chi tiết cách kết nối và điều khiển điện thoại Android từ xa qua internet bằng ADB và mạng ảo Tailscale mà không cần mở port router.",
+    "file": "adb-tailscale-remote.md"
+  },
+  {
     "id": "vietqr-autofill-deeplink",
     "title": "Tích hợp Thanh toán 1-Click: Tự động điền thông tin với VietQR DeepLink",
     "date": "2026-05-10",
