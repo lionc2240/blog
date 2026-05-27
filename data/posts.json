@@ -1,5 +1,13 @@
 [
   {
+    "id": "scp-pc-to-android",
+    "title": "Chuyển file từ máy tính về điện thoại qua SCP & Termux",
+    "date": "2026-05-28",
+    "tags": ["SCP", "SSH", "Termux", "Windows", "File Transfer"],
+    "excerpt": "Hướng dẫn chi tiết cách sử dụng lệnh SCP trên máy tính để truyền dữ liệu và thư mục vào điện thoại Android một cách nhanh chóng.",
+    "file": "scp-pc-to-android.md"
+  },
+  {
     "id": "adb-tailscale-remote",
     "title": "Kết nối ADB từ xa mọi nơi với Tailscale: Điều khiển Android không giới hạn khoảng cách",
     "date": "2026-05-14",
