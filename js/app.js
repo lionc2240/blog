@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadPostsList() {
         const container = document.getElementById('posts-container');
+        const tagsContainer = document.getElementById('tags-container');
         try {
             const response = await fetch('data/posts.json');
             if (!response.ok) throw new Error('Network response was not ok');
@@ -70,39 +71,91 @@ document.addEventListener('DOMContentLoaded', () => {
             // Sort by date descending
             posts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-            container.innerHTML = ''; // Clear loading
-
+            // Extract unique tags
+            const allTags = new Set();
             posts.forEach(post => {
-                const card = document.createElement('a');
-                card.href = `post.html?id=${post.id}`;
-                card.className = 'post-card';
-                
-                // Format date
-                const dateObj = new Date(post.date);
-                const formattedDate = dateObj.toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' });
-
-                let tagsHtml = '';
-                if(post.tags && post.tags.length > 0) {
-                    tagsHtml = post.tags.map(tag => `<span class="post-tag">${tag}</span>`).join('');
+                if (post.tags) {
+                    post.tags.forEach(tag => allTags.add(tag));
                 }
-
-                card.innerHTML = `
-                    <div class="post-meta">
-                        <span>${formattedDate}</span>
-                        ${tagsHtml}
-                    </div>
-                    <h3 class="post-title">${post.title}</h3>
-                    <p class="post-excerpt">${post.excerpt}</p>
-                    <span class="post-read-more">Đọc tiếp →</span>
-                `;
-                container.appendChild(card);
             });
 
-            attachCardEffects();
+            // Render tag buttons
+            if (tagsContainer) {
+                tagsContainer.innerHTML = '';
+                const allBtn = document.createElement('button');
+                allBtn.className = 'tag-filter-btn active';
+                allBtn.textContent = 'Tất cả';
+                allBtn.dataset.tag = 'all';
+                tagsContainer.appendChild(allBtn);
+
+                allTags.forEach(tag => {
+                    const btn = document.createElement('button');
+                    btn.className = 'tag-filter-btn';
+                    btn.textContent = tag;
+                    btn.dataset.tag = tag;
+                    tagsContainer.appendChild(btn);
+                });
+
+                // Set click handler
+                tagsContainer.addEventListener('click', (e) => {
+                    const btn = e.target.closest('.tag-filter-btn');
+                    if (!btn) return;
+
+                    // Toggle active class
+                    tagsContainer.querySelectorAll('.tag-filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const selectedTag = btn.dataset.tag;
+                    renderFilteredPosts(posts, selectedTag, container);
+                });
+            }
+
+            renderFilteredPosts(posts, 'all', container);
         } catch (error) {
             console.error('Error loading posts:', error);
             container.innerHTML = '<div class="loading">Không thể tải bài viết. Vui lòng thử lại sau.</div>';
         }
+    }
+
+    function renderFilteredPosts(posts, filterTag, container) {
+        container.innerHTML = '';
+        
+        const filtered = filterTag === 'all' 
+            ? posts 
+            : posts.filter(post => post.tags && post.tags.includes(filterTag));
+
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="loading">Không tìm thấy bài viết nào.</div>';
+            return;
+        }
+
+        filtered.forEach(post => {
+            const card = document.createElement('a');
+            card.href = `post.html?id=${post.id}`;
+            card.className = 'post-card';
+            
+            // Format date
+            const dateObj = new Date(post.date);
+            const formattedDate = dateObj.toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            let tagsHtml = '';
+            if(post.tags && post.tags.length > 0) {
+                tagsHtml = post.tags.map(tag => `<span class="post-tag">${tag}</span>`).join('');
+            }
+
+            card.innerHTML = `
+                <div class="post-meta">
+                    <span>${formattedDate}</span>
+                    ${tagsHtml}
+                </div>
+                <h3 class="post-title">${post.title}</h3>
+                <p class="post-excerpt">${post.excerpt}</p>
+                <span class="post-read-more">Đọc tiếp →</span>
+            `;
+            container.appendChild(card);
+        });
+
+        attachCardEffects();
     }
 
     async function loadSinglePost() {
@@ -127,23 +180,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // Fetch Markdown Content
+            const mdResponse = await fetch(`posts/${postMeta.file}`);
+            if (!mdResponse.ok) throw new Error('Could not load markdown file');
+            const mdContent = await mdResponse.text();
+
+            // Calculate Reading Time (assume 200 words per minute for Vietnamese)
+            const wordCount = mdContent.trim().split(/\s+/).length;
+            const readingTime = Math.ceil(wordCount / 200);
+
             // Update Header
             const dateObj = new Date(postMeta.date);
             const formattedDate = dateObj.toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' });
             
             document.getElementById('post-header').innerHTML = `
                 <h1 class="post-page-title">${postMeta.title}</h1>
-                <div class="post-meta" style="justify-content: center; font-size: 1rem;">
+                <div class="post-meta" style="justify-content: center; font-size: 1rem; flex-wrap: wrap; gap: 0.75rem;">
                     <span>${formattedDate}</span>
+                    <span class="post-reading-time" style="display: flex; align-items: center; gap: 0.25rem;">⏱️ ${readingTime} phút đọc</span>
                     ${postMeta.tags ? postMeta.tags.map(tag => `<span class="post-tag">${tag}</span>`).join('') : ''}
                 </div>
             `;
             document.title = `${postMeta.title} - HgBlog`;
-
-            // Fetch Markdown Content
-            const mdResponse = await fetch(`posts/${postMeta.file}`);
-            if (!mdResponse.ok) throw new Error('Could not load markdown file');
-            const mdContent = await mdResponse.text();
 
             // Setup Copy Article Markdown Button
             const postHeader = document.getElementById('post-header');
@@ -173,24 +231,74 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (typeof DOMPurify !== 'undefined') {
                     htmlContent = DOMPurify.sanitize(htmlContent);
                 }
-                document.getElementById('post-content').innerHTML = htmlContent;
-                document.getElementById('post-content').classList.add('loaded');
+                
+                const contentDiv = document.getElementById('post-content');
+                contentDiv.innerHTML = htmlContent;
+                contentDiv.classList.add('loaded');
                 
                 if (typeof Prism !== 'undefined') {
                     Prism.highlightAll();
                 }
 
                 // Add anchor links and copy buttons to headings (H2, H3)
-                const contentDiv = document.getElementById('post-content');
                 const headings = contentDiv.querySelectorAll('h2, h3');
                 
+                // Table of Contents generation
+                if (headings.length > 0) {
+                    const tocContainer = document.createElement('div');
+                    tocContainer.className = 'toc-container';
+                    
+                    const tocHeader = document.createElement('div');
+                    tocHeader.className = 'toc-header';
+                    
+                    const tocTitle = document.createElement('span');
+                    tocTitle.className = 'toc-title';
+                    tocTitle.innerHTML = '📌 Mục lục bài viết';
+                    
+                    const tocToggle = document.createElement('button');
+                    tocToggle.id = 'toc-toggle';
+                    tocToggle.className = 'toc-toggle-btn';
+                    tocToggle.textContent = '[Ẩn]';
+                    
+                    tocHeader.appendChild(tocTitle);
+                    tocHeader.appendChild(tocToggle);
+                    tocContainer.appendChild(tocHeader);
+                    
+                    const tocList = document.createElement('ul');
+                    tocList.id = 'toc-list';
+                    tocList.className = 'toc-list';
+                    
+                    headings.forEach(heading => {
+                        const headingText = heading.innerText.trim();
+                        const headingId = heading.id || headingText.toLowerCase().replace(/[^\w]+/g, '-');
+                        if (!heading.id) heading.id = headingId;
+                        
+                        const tocItem = document.createElement('li');
+                        tocItem.className = `toc-item toc-item-${heading.tagName.toLowerCase()}`;
+                        
+                        const tocLink = document.createElement('a');
+                        tocLink.href = `#${headingId}`;
+                        tocLink.className = 'toc-link';
+                        tocLink.textContent = headingText;
+                        
+                        tocItem.appendChild(tocLink);
+                        tocList.appendChild(tocItem);
+                    });
+                    
+                    tocContainer.appendChild(tocList);
+                    contentDiv.prepend(tocContainer);
+                    
+                    // Toggle behavior
+                    tocToggle.addEventListener('click', () => {
+                        const isHidden = tocList.style.display === 'none';
+                        tocList.style.display = isHidden ? 'flex' : 'none';
+                        tocToggle.textContent = isHidden ? '[Ẩn]' : '[Hiện]';
+                    });
+                }
+
+                // Add anchors to headings
                 headings.forEach(heading => {
                     const headingText = heading.innerText;
-                    if (!heading.id) {
-                        heading.id = headingText.toLowerCase().replace(/[^\w]+/g, '-');
-                    }
-
-                    // Prepend Anchor Link (#)
                     const anchor = document.createElement('a');
                     anchor.href = `#${heading.id}`;
                     anchor.className = 'anchor-link';
@@ -201,7 +309,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Make the heading itself clickable to update URL hash
                     heading.addEventListener('click', (e) => {
-                        // Avoid triggering if the click was specifically on the anchor link (which already handles it)
                         if (e.target !== anchor) {
                             window.location.hash = heading.id;
                         }

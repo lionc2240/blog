@@ -180,6 +180,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .section-header h2 {
@@ -611,4 +613,124 @@ body {
 @keyframes fadeInContent {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* GitHub Link in Footer */
+.github-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.github-link:hover {
+    color: #ffffff; /* White for GitHub hover */
+}
+
+/* Tags Filter Component */
+.tags-filter {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.tag-filter-btn {
+    background: var(--surface-color);
+    border: 1px solid var(--surface-border);
+    color: var(--text-secondary);
+    padding: 0.35rem 0.75rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.tag-filter-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tag-filter-btn.active {
+    background: var(--gradient-1);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 0 12px rgba(88, 166, 255, 0.4);
+}
+
+/* Table of Contents (TOC) Component */
+.toc-container {
+    background: var(--surface-color);
+    border: 1px solid var(--surface-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 2.5rem;
+}
+
+.toc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--surface-border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.toc-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.toc-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.toc-toggle-btn:hover {
+    background: rgba(88, 166, 255, 0.1);
+}
+
+.toc-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toc-item {
+    font-size: 0.95rem;
+}
+
+.toc-item-h2 {
+    padding-left: 0;
+}
+
+.toc-item-h3 {
+    padding-left: 1.25rem;
+    font-size: 0.9rem;
+}
+
+.toc-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: var(--transition);
+    border-bottom: 1px solid transparent;
+}
+
+.toc-link:hover {
+    color: var(--accent-color);
 }
