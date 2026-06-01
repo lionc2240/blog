@@ -1,62 +1,82 @@
 SSH (Secure Shell) là công cụ không thể thiếu cho anh em hay "work-on-the-way". Thay vì gõ mật khẩu loằng ngoằng trên màn hình điện thoại bé xíu, việc sử dụng SSH Key giúp bạn kết nối chỉ bằng một lệnh duy nhất, nhanh chóng và cực kỳ bảo mật.
 
-Dưới đây là cách thiết lập nhanh để Android điều khiển Windows hoặc Android khác.
+Dưới đây là cách thiết lập theo chuẩn hiện đại để Android kết nối và điều khiển Windows hoặc Android khác không cần mật khẩu.
 
 ## 1. Chuẩn bị trên Termux
 
-Đầu tiên, hãy đảm bảo bạn đã cài đặt `openssh`:
+Đầu tiên, hãy đảm bảo bạn đã cài đặt `openssh` trên cả thiết bị điều khiển (Client) và thiết bị nhận lệnh (Server):
 
 ```bash
 pkg update && pkg upgrade
 pkg install openssh
 ```
 
-## 2. Tạo SSH Key (Trên máy điều khiển - Client)
+## 2. Tạo SSH Key hiện đại (Trên máy điều khiển - Client)
 
-Nếu bạn dùng điện thoại để điều khiển máy khác, hãy tạo khóa trên chính điện thoại đó:
+Nếu bạn dùng điện thoại để điều khiển máy khác, hãy tạo khóa trên chính điện thoại đó. 
+Thay vì thuật toán RSA cũ, chuẩn hiện đại khuyến nghị sử dụng **Ed25519** vì độ bảo mật cao hơn, tốc độ xử lý nhanh hơn và độ dài khóa ngắn hơn:
 
 ```bash
-ssh-keygen -t rsa -b 4096
+ssh-keygen -t ed25519
 ```
 
-Nhấn **Enter** liên tục để bỏ qua mật khẩu (passphrase) nếu bạn muốn đăng nhập "1-click". File khóa sẽ nằm tại `~/.ssh/id_rsa.pub`.
+Nhấn **Enter** liên tục để bỏ qua mật khẩu khóa (passphrase) để thiết lập chế độ đăng nhập "1-click". 
+Lúc này, file khóa công khai của bạn sẽ nằm tại `~/.ssh/id_ed25519.pub`.
 
 ## 3. Chép Public Key sang máy bị điều khiển (Host/Server)
 
-Bạn cần đưa nội dung của file `id_rsa.pub` vào file `authorized_keys` trên máy đích.
+### A. Phương pháp hiện đại và nhanh nhất: Dùng `ssh-copy-id`
+Nếu máy bị điều khiển hỗ trợ SSH (như Android chạy Termux hoặc hệ điều hành Linux), bạn có thể dùng công cụ tự động sao chép và phân quyền khóa chỉ bằng 1 câu lệnh:
 
-### A. Android sang Android
-Trên máy điều khiển, copy nội dung key:
 ```bash
-cat ~/.ssh/id_rsa.pub
+ssh-copy-id -i ~/.ssh/id_ed25519.pub -p [cổng_ssh] [username]@[ip_địa_chỉ]
 ```
-Copy đoạn mã bắt đầu bằng `ssh-rsa ...` và gửi sang máy bị điều khiển. Trên máy bị điều khiển (trong Termux), chạy:
 
+**Ví dụ thực tế giữa 2 thiết bị Android (Termux mặc định cổng 8022):**
+```bash
+ssh-copy-id -i ~/.ssh/id_ed25519.pub -p 8022 u0_a933@100.86.113.93
+```
+*Nhập mật khẩu của thiết bị remote một lần duy nhất khi được hỏi. Lệnh sẽ tự động cấu hình và phân quyền an toàn cho file `authorized_keys` trên máy nhận.*
+
+### B. Sao chép thủ công (Cho các trường hợp đặc biệt)
+
+#### Trường hợp kết nối từ Android sang Windows:
+1. Xem nội dung khóa công khai trên điện thoại để copy:
+   ```bash
+   cat ~/.ssh/id_ed25519.pub
+   ```
+2. Gửi đoạn text bắt đầu bằng `ssh-ed25519 ...` sang máy tính Windows.
+3. Trên máy tính Windows, dán đoạn mã đó vào cuối file:
+   `C:\Users\Tên_User\.ssh\authorized_keys`
+
+#### Trường hợp thiết bị nhận không hỗ trợ `ssh-copy-id`:
+Nếu vì lý do gì đó không dùng được `ssh-copy-id` giữa hai thiết bị Android, bạn có thể copy nội dung key thủ công và chạy lệnh sau trên Termux của máy nhận:
 ```bash
 mkdir -p ~/.ssh
 echo "NỘI_DUNG_KEY_VỪA_COPY" >> ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
 chmod 600 ~/.ssh/authorized_keys
 ```
 
-### B. Android sang Windows
-Nếu bạn muốn dùng điện thoại điều khiển Windows (qua OpenSSH Server), hãy copy nội dung key vào file:
-`C:\Users\Tên_User\.ssh\authorized_keys`
-
 ## 4. Kết nối
 
-Giờ đây, từ điện thoại, bạn chỉ cần gõ:
+Giờ đây, từ điện thoại của bạn, chỉ cần gõ lệnh kết nối trực tiếp:
 
 ```bash
-ssh user@ip_address -p port
+ssh [username]@[ip_địa_chỉ] -p [cổng_ssh]
 ```
 
-*Lưu ý: Với Termux, port mặc định là `8022`. Với Windows, port mặc định là `22`.*
+Ví dụ:
+```bash
+ssh u0_a933@100.86.113.93 -p 8022
+```
 
-### Mẹo nhỏ:
-- **Kết nối nhanh bằng Alias:** Tạo alias trong `.bashrc` hoặc `.zshrc` để vào nhanh:
+### Mẹo nhỏ nâng cao:
+- **Rút gọn lệnh với Alias:** Thêm alias vào file `~/.zshrc` hoặc `~/.bashrc` để đăng nhập siêu nhanh:
   ```bash
-  alias win='ssh user@192.168.1.x'
+  alias ssh-vivo="ssh -p 8022 u0_a933@100.86.113.93"
   ```
-- **Windows Terminal:** Nếu bạn ngồi máy tính, hãy dùng **Windows Terminal** để tạo các Profiles SSH. Bạn có thể mở nhiều tab Termux cùng lúc, copy-paste cực nhanh và gõ lệnh bằng bàn phím cơ thay vì màn hình cảm ứng.
+  Sau khi cấu hình, bạn chỉ cần gõ `ssh-vivo` là tự động đăng nhập.
+- **Sử dụng Windows Terminal:** Nếu ngồi trước máy tính, hãy cấu hình SSH profile trong **Windows Terminal** để mở nhanh tab kết nối tới điện thoại.
 
-Chúc các bạn làm việc hiệu quả ngay cả khi đang di chuyển!
+Chúc các bạn làm việc hiệu quả và quản lý thiết bị mượt mà!
