@@ -1,5 +1,7 @@
 SSH (Secure Shell) là công cụ không thể thiếu cho anh em hay "work-on-the-way". Thay vì gõ mật khẩu loằng ngoằng trên màn hình điện thoại bé xíu, việc sử dụng SSH Key giúp bạn kết nối chỉ bằng một lệnh duy nhất, nhanh chóng và cực kỳ bảo mật.
 
+> 💡 **Nguyên tắc dễ nhớ:** Máy nào điều khiển thì tạo key ở máy đó rồi ném sang máy được điều khiển (tại máy được điều khiển, key của máy điều khiển sẽ được lưu tại `~/.ssh/authorized_keys`).
+
 Dưới đây là cách thiết lập theo chuẩn hiện đại để Android kết nối và điều khiển Windows hoặc Android khác không cần mật khẩu.
 
 ## 1. Chuẩn bị trên Termux
@@ -48,6 +50,31 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub -p 8022 u0_a933@100.86.113.93
 2. Gửi đoạn text bắt đầu bằng `ssh-ed25519 ...` sang máy tính Windows.
 3. Trên máy tính Windows, dán đoạn mã đó vào cuối file:
    `C:\Users\Tên_User\.ssh\authorized_keys`
+
+#### Trường hợp kết nối từ Windows (PowerShell) sang Android (Termux):
+
+Nếu bạn đang dùng máy tính Windows và muốn SSH vào điện thoại Android không cần mật khẩu, hãy thực hiện các bước sau trên **PowerShell**:
+
+1. **Tạo SSH Key trên Windows (nếu chưa có):**
+   Chạy lệnh sau trên PowerShell:
+   ```powershell
+   ssh-keygen -t ed25519
+   ```
+   *Nhấn **Enter** liên tục để bỏ qua passphrase.*
+
+2. **Chép Public Key sang Termux:**
+   Chạy lệnh sau trên PowerShell (thay thế `[username]` và `[ip_địa_chỉ]` bằng thông tin Termux của bạn):
+   ```powershell
+   Get-Content $HOME\.ssh\id_ed25519.pub | ssh [username]@[ip_địa_chỉ] -p 8022 "cat >> ~/.ssh/authorized_keys"
+   ```
+   *Nhập mật khẩu SSH của Termux khi được yêu cầu.*
+
+3. **Phân quyền trên Termux:**
+   Để đảm bảo OpenSSH chấp nhận khóa, hãy chạy các lệnh sau trên Termux của điện thoại:
+   ```bash
+   chmod 700 ~/.ssh
+   chmod 600 ~/.ssh/authorized_keys
+   ```
 
 #### Trường hợp thiết bị nhận không hỗ trợ `ssh-copy-id`:
 Nếu vì lý do gì đó không dùng được `ssh-copy-id` giữa hai thiết bị Android, bạn có thể copy nội dung key thủ công và chạy lệnh sau trên Termux của máy nhận:
