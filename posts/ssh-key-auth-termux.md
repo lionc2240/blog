@@ -63,11 +63,29 @@ Nếu bạn đang dùng máy tính Windows và muốn SSH vào điện thoại A
    *Nhấn **Enter** liên tục để bỏ qua passphrase.*
 
 2. **Chép Public Key sang Termux:**
-   Chạy lệnh sau trên PowerShell (thay thế `[username]` và `[ip_địa_chỉ]` bằng thông tin Termux của bạn):
-   ```powershell
-   Get-Content $HOME\.ssh\id_ed25519.pub | ssh [username]@[ip_địa_chỉ] -p 8022 "cat >> ~/.ssh/authorized_keys"
-   ```
-   *Nhập mật khẩu SSH của Termux khi được yêu cầu.*
+   Bạn có thể chọn một trong hai cách sau:
+
+   * **Cách 1: Tự động gửi bằng lệnh (Khuyên dùng)**
+     Chạy lệnh sau trên PowerShell (thay thế `[username]` và `[ip_địa_chỉ]` bằng thông tin Termux của bạn):
+     ```powershell
+     Get-Content $HOME\.ssh\id_ed25519.pub | ssh [username]@[ip_địa_chỉ] -p 8022 "cat >> ~/.ssh/authorized_keys"
+     ```
+     *Nhập mật khẩu SSH của Termux khi được yêu cầu.*
+
+   * **Cách 2: Sao chép thủ công**
+     - Trên PowerShell (Windows), xem nội dung key để sao chép:
+       ```powershell
+       Get-Content $HOME\.ssh\id_ed25519.pub
+       ```
+       *(Copy toàn bộ dòng text bắt đầu bằng `ssh-ed25519 ...`)*
+     - SSH đăng nhập vào Termux trên điện thoại:
+       ```powershell
+       ssh [username]@[ip_địa_chỉ] -p 8022
+       ```
+     - Chạy lệnh sau trên Termux để thêm khóa (thay `NỘI_DUNG_KEY_VỪA_COPY` bằng đoạn text bạn vừa copy):
+       ```bash
+       echo "NỘI_DUNG_KEY_VỪA_COPY" >> ~/.ssh/authorized_keys
+       ```
 
 3. **Phân quyền trên Termux:**
    Để đảm bảo OpenSSH chấp nhận khóa, hãy chạy các lệnh sau trên Termux của điện thoại:
