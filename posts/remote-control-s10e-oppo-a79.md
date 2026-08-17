@@ -125,7 +125,7 @@ am start com.termux.x11/.MainActivity
 # 2. Khởi động server hiển thị
 termux-x11 :0 -ac &
 export DISPLAY=:0
-export SDL_VIDEODRIVER=x11
+export SDL_VIDEODRIVER=x11   # Có thể bỏ qua dòng này nếu thiết bị tự nhận diện X11
 
 # 3. Kết nối tới IP Tailscale của thiết bị Android (S10e)
 adb connect 100.x.y.z:5555
@@ -133,6 +133,8 @@ adb connect 100.x.y.z:5555
 # 4. Chạy Scrcpy truyền hình ảnh (bỏ qua audio để tránh giật lag)
 scrcpy -s 100.x.y.z:5555 --video-bit-rate=2M --max-fps=30 --max-size=1080 --no-audio
 ```
+
+> *Ghi chú: Dòng `export SDL_VIDEODRIVER=x11` là tùy chọn (có thể bỏ qua nếu thiết bị của bạn tự nhận diện được Termux-X11).*
 
 ---
 
