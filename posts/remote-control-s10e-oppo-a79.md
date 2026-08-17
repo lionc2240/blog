@@ -51,22 +51,84 @@ Trên thiết bị Android (Oppo), chúng ta cần môi trường để hiển t
 
 ## 4. Thao tác điều khiển từ xa
 
-Mỗi khi bạn ở ngoài và muốn vào thiết bị Android (S10e):
+### Cách 1: Tự động hóa bằng Script 1-Chạm (Khuyên dùng)
 
-1.  Đảm bảo cả 2 máy đều đã bật **Tailscale**.
-2.  Mở app **Termux-X11** trên thiết bị Android (Oppo) (để chạy nền).
-3.  Trong **Termux** trên thiết bị Android (Oppo), thực hiện chuỗi lệnh:
-    ```bash
-    # Kết nối tới IP Tailscale của thiết bị Android (S10e)
-    adb connect 100.x.y.z:5555
+Tạo file script tự động tại `~/.shortcuts/screen-share-s10e.sh` để vừa mở giao diện Termux-X11, vừa kết nối ADB và tự động giữ Terminal không bị đóng:
 
-    # Khởi động server hiển thị
-    termux-x11 :0 &
-    export DISPLAY=:0
+```bash
+mkdir -p ~/.shortcuts
+nano ~/.shortcuts/screen-share-s10e.sh
+```
 
-    # Chạy Scrcpy với cấu hình tối ưu cho 4G
-    scrcpy --video-bit-rate=2M --max-fps=30 --max-size=1080
-    ```
+Dán nội dung script chuẩn sau:
+
+```bash
+#!/data/data/com.termux/files/usr/bin/zsh
+# Script khởi động Screen Share tự động từ xa
+IP="${1:-100.113.58.97}"
+PORT="${2:-5555}"
+
+echo "--- 1. Đình chỉ X11 server cũ (nếu có) ---"
+pkill -f termux-x11 >/dev/null 2>&1
+sleep 1
+
+echo "--- 2. Mở app Termux-X11 ---"
+am start com.termux.x11/.MainActivity >/dev/null 2>&1
+sleep 1
+
+echo "--- 3. Khởi động Server Termux-X11 ---"
+termux-x11 :0 -ac &
+sleep 2
+
+export DISPLAY=:0
+export SDL_VIDEODRIVER=x11
+
+echo "--- 4. Kết nối ADB $IP:$PORT ---"
+adb connect "$IP:$PORT"
+sleep 1
+
+echo "--- 5. Chạy Scrcpy ---"
+scrcpy -s "$IP:$PORT" --video-bit-rate=2M --max-fps=30 --max-size=1080 --no-audio
+
+echo ""
+echo "================================================="
+echo " Terminal đang được giữ lại (Không auto exit)."
+echo " Bạn có thể xem log trên hoặc gõ lệnh tiếp."
+echo " Gõ 'exit' khi muốn đóng terminal này."
+echo "================================================="
+
+# Giữ terminal luôn mở dạng tương tác, tránh bị auto exit
+exec zsh -i
+```
+
+Cấp quyền thực thi cho file:
+```bash
+chmod +x ~/.shortcuts/screen-share-s10e.sh
+```
+
+Bây giờ bạn chỉ cần chạy `~/.shortcuts/screen-share-s10e.sh` (hoặc tạo nút bấm trên **Termux:Widget** ở màn hình chính).
+
+---
+
+### Cách 2: Chạy lệnh thủ công từng bước
+
+Nếu muốn chạy thủ công từng lệnh trong Terminal:
+
+```bash
+# 1. Mở app Termux-X11
+am start com.termux.x11/.MainActivity
+
+# 2. Khởi động server hiển thị
+termux-x11 :0 -ac &
+export DISPLAY=:0
+export SDL_VIDEODRIVER=x11
+
+# 3. Kết nối tới IP Tailscale của thiết bị Android (S10e)
+adb connect 100.x.y.z:5555
+
+# 4. Chạy Scrcpy truyền hình ảnh (bỏ qua audio để tránh giật lag)
+scrcpy -s 100.x.y.z:5555 --video-bit-rate=2M --max-fps=30 --max-size=1080 --no-audio
+```
 
 ---
 
@@ -82,9 +144,8 @@ Mỗi khi bạn ở ngoài và muốn vào thiết bị Android (S10e):
 Khi đã xong việc, bạn cần đóng các tiến trình để tiết kiệm pin:
 
 1.  Tại màn hình Termux đang chạy Scrcpy, nhấn **Ctrl + C** để dừng truyền hình ảnh.
-2.  Ngắt kết nối ADB: `adb disconnect`.
-3.  Đóng server hiển thị: `pkill -f termux-x11`.
-4.  Kéo thanh thông báo, chọn **Exit** trên thông báo của Termux để đóng hoàn toàn ứng dụng.
+2.  Gõ `exit` để đóng phiên làm việc Terminal.
+3.  Nếu chạy thủ công, bạn có thể ngắt kết nối ADB & Server X11: `adb disconnect && pkill -f termux-x11`.
 
 ---
 *Chúc các bạn thiết lập thành công máy trạm từ xa của riêng mình!*
