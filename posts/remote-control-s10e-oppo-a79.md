@@ -110,6 +110,8 @@ chmod +x ~/.shortcuts/screen-share-s10e.sh
 
 Bây giờ bạn chỉ cần chạy `~/.shortcuts/screen-share-s10e.sh` (hoặc tạo nút bấm trên **Termux:Widget** ở màn hình chính).
 
+> *Ghi chú: Dòng `export SDL_VIDEODRIVER=x11` dùng để ép scrcpy xuất hình ảnh qua hệ thống đồ họa Termux-X11 (tránh lỗi SDL video). Nếu thiết bị của bạn tự nhận diện được Termux-X11, bạn có thể bỏ dòng này đi.*
+
 ---
 
 ### Cách 2: Chạy lệnh thủ công từng bước
