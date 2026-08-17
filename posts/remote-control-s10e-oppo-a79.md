@@ -1,5 +1,7 @@
 # Điều khiển Android (S10e) từ xa bằng Android (Oppo A79): Giải pháp "Máy trạm bỏ túi" với Termux & Scrcpy
 
+*Cập nhật: Ngày 17 tháng 8 năm 2026*
+
 Bạn có một thiết bị Android (Samsung S10e) để cố định tại nhà (cắm sạc 24/7) và một thiết bị Android khác (Oppo A79) thường xuyên mang ra ngoài? Bài viết này sẽ hướng dẫn bạn cách biến thiết bị Android (S10e) thành một máy trạm từ xa, giúp bạn làm việc hoặc xử lý tác vụ ngay trên màn hình thiết bị Android (Oppo) thông qua Internet.
 
 Chúng ta sẽ sử dụng bộ công cụ mạnh mẽ: **Termux**, **Scrcpy**, **Termux-X11** và **Tailscale**.
