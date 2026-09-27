@@ -60,20 +60,49 @@ document.addEventListener('DOMContentLoaded', () => {
         loadSinglePost();
     }
 
+    function removeAccents(str) {
+        if (!str) return '';
+        return str
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/đ/g, 'd')
+            .replace(/Đ/g, 'D');
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/[&<>"']/g, function(m) {
+            return {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            }[m];
+        });
+    }
+
     async function loadPostsList() {
         const container = document.getElementById('posts-container');
         const tagsContainer = document.getElementById('tags-container');
+        const searchInput = document.getElementById('search-input');
+        const searchClearBtn = document.getElementById('search-clear-btn');
+        const postsCount = document.getElementById('posts-count');
+
+        let allPosts = [];
+        let activeTag = 'all';
+        let searchQuery = '';
+
         try {
             const response = await fetch('data/posts.json');
             if (!response.ok) throw new Error('Network response was not ok');
-            const posts = await response.json();
+            allPosts = await response.json();
             
             // Sort by date descending
-            posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+            allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
             // Extract unique tags
             const allTags = new Set();
-            posts.forEach(post => {
+            allPosts.forEach(post => {
                 if (post.tags) {
                     post.tags.forEach(tag => allTags.add(tag));
                 }
@@ -96,45 +125,114 @@ document.addEventListener('DOMContentLoaded', () => {
                     tagsContainer.appendChild(btn);
                 });
 
-                // Set click handler
+                // Tag click handler
                 tagsContainer.addEventListener('click', (e) => {
                     const btn = e.target.closest('.tag-filter-btn');
                     if (!btn) return;
 
-                    // Toggle active class
                     tagsContainer.querySelectorAll('.tag-filter-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
 
-                    const selectedTag = btn.dataset.tag;
-                    renderFilteredPosts(posts, selectedTag, container);
+                    activeTag = btn.dataset.tag;
+                    applyFilters();
                 });
             }
 
-            renderFilteredPosts(posts, 'all', container);
+            // Search input listener
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    searchQuery = e.target.value;
+                    if (searchClearBtn) {
+                        searchClearBtn.style.display = searchQuery ? 'block' : 'none';
+                    }
+                    applyFilters();
+                });
+            }
+
+            // Search clear button listener
+            if (searchClearBtn) {
+                searchClearBtn.addEventListener('click', () => {
+                    if (searchInput) {
+                        searchInput.value = '';
+                        searchInput.focus();
+                    }
+                    searchQuery = '';
+                    if (searchClearBtn) {
+                        searchClearBtn.style.display = 'none';
+                    }
+                    applyFilters();
+                });
+            }
+
+            function applyFilters() {
+                const normalizedQuery = removeAccents(searchQuery.trim().toLowerCase());
+                
+                const filtered = allPosts.filter(post => {
+                    // Tag filter
+                    const matchesTag = activeTag === 'all' || (post.tags && post.tags.includes(activeTag));
+                    if (!matchesTag) return false;
+
+                    // Search filter
+                    if (!normalizedQuery) return true;
+
+                    const titleMatch = removeAccents(post.title.toLowerCase()).includes(normalizedQuery);
+                    const excerptMatch = removeAccents(post.excerpt.toLowerCase()).includes(normalizedQuery);
+                    const tagsMatch = post.tags && post.tags.some(tag => removeAccents(tag.toLowerCase()).includes(normalizedQuery));
+
+                    return titleMatch || excerptMatch || tagsMatch;
+                });
+
+                // Update count badge
+                if (postsCount) {
+                    postsCount.textContent = `${filtered.length} bài viết`;
+                }
+
+                renderPosts(filtered, container, searchQuery);
+            }
+
+            // Initial render
+            applyFilters();
+
         } catch (error) {
             console.error('Error loading posts:', error);
             container.innerHTML = '<div class="loading">Không thể tải bài viết. Vui lòng thử lại sau.</div>';
         }
     }
 
-    function renderFilteredPosts(posts, filterTag, container) {
+    function renderPosts(posts, container, currentSearchQuery) {
         container.innerHTML = '';
-        
-        const filtered = filterTag === 'all' 
-            ? posts 
-            : posts.filter(post => post.tags && post.tags.includes(filterTag));
 
-        if (filtered.length === 0) {
-            container.innerHTML = '<div class="loading">Không tìm thấy bài viết nào.</div>';
+        if (posts.length === 0) {
+            const isSearching = Boolean(currentSearchQuery.trim());
+            container.innerHTML = `
+                <div class="no-results">
+                    <div class="no-results-icon">🔍</div>
+                    <p>${isSearching 
+                        ? `Không tìm thấy bài viết nào phù hợp với "<strong>${escapeHtml(currentSearchQuery)}</strong>"`
+                        : 'Không tìm thấy bài viết nào.'}</p>
+                    ${isSearching ? '<button id="reset-search-btn" class="reset-search-btn">Xóa tìm kiếm</button>' : ''}
+                </div>
+            `;
+
+            const resetBtn = document.getElementById('reset-search-btn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    const searchInput = document.getElementById('search-input');
+                    if (searchInput) {
+                        searchInput.value = '';
+                        searchInput.dispatchEvent(new Event('input'));
+                        searchInput.focus();
+                    }
+                });
+            }
             return;
         }
 
-        filtered.forEach(post => {
+        posts.forEach(post => {
             const card = document.createElement('a');
             card.href = `post.html?id=${post.id}`;
             card.className = 'post-card';
             
-            // Format date
             const dateObj = new Date(post.date);
             const formattedDate = dateObj.toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' });
 
