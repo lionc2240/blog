@@ -1,5 +1,13 @@
 [
   {
+    "id": "scrcpy-s10e-laptop",
+    "title": "Hướng dẫn điều khiển Samsung Galaxy S10e từ Laptop bằng Scrcpy",
+    "date": "2026-09-27",
+    "tags": ["Scrcpy", "Android", "S10e", "Laptop", "Remote Control"],
+    "excerpt": "Hướng dẫn chi tiết cách kết nối, phản chiếu và điều khiển điện thoại Samsung Galaxy S10e trực tiếp từ máy tính Laptop bằng Scrcpy qua USB và Wi-Fi.",
+    "file": "scrcpy-s10e-laptop.md"
+  },
+  {
     "id": "scp-pc-to-android",
     "title": "Chuyển file từ máy tính về điện thoại qua SCP & Termux",
     "date": "2026-05-28",
