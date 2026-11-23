@@ -154,4 +154,43 @@ Khi đã xong việc, bạn cần đóng các tiến trình để tiết kiệm 
 3.  Nếu chạy thủ công, bạn có thể ngắt kết nối ADB & Server X11: `adb disconnect && pkill -f termux-x11`.
 
 ---
+
+## 7. Khắc phục vấn đề (nếu có)
+
+### Lỗi `unauthorized` khi kết nối port 5555
+
+Lần đầu chạy script từ thiết bị Android (Oppo), bạn có thể gặp:
+```
+failed to authenticate to 100.113.58.97:5555
+ERROR: Device is unauthorized:
+ERROR:     --> (tcpip)  100.113.58.97:5555        unauthorized
+```
+
+**Nguyên nhân:** Port 5555 (mở bằng `adb tcpip`) dùng cơ chế xác thực khóa RSA. Việc pair qua Wireless Debugging chỉ cấp quyền cho chính thiết bị Android (S10e). Thiết bị Android (Oppo) có khóa ADB riêng nên cần được cho phép thêm.
+
+**Cách khắc phục (chỉ làm 1 lần):**
+1. Chạy lại script. Bước unlock sẽ mở khóa màn hình S10e.
+2. Trên S10e sẽ hiện hộp thoại **"Cho phép gỡ lỗi USB?"**.
+3. Tick **"Luôn cho phép từ máy tính này"** → bấm **Cho phép**.
+4. Chạy lại script, Scrcpy sẽ kết nối bình thường.
+
+Nếu không thấy hộp thoại, chạy trên Oppo để kích hoạt lại:
+```bash
+adb disconnect 100.113.58.97:5555
+adb kill-server
+adb connect 100.113.58.97:5555
+```
+
+> Đã tick "Luôn cho phép" thì hộp thoại sẽ không hiện lại, kể cả sau khi reboot.
+
+### Các cảnh báo vô hại trong log
+
+Những dòng sau là thông báo bình thường của Termux-X11, có thể bỏ qua:
+```
+Could not open module param file '/sys/module/mali_kbase/parameters/large_page_conf'
+"The XKEYBOARD keymap compiler (xkbcomp) reports:"
+"Errors from xkbcomp are not fatal to the X server"
+```
+
+---
 *Chúc các bạn thiết lập thành công máy trạm từ xa của riêng mình!*
