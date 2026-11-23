@@ -125,10 +125,4 @@ Lưu thành `adb-run.sh`, dùng như:
 ./adb-run.sh input keyevent KEYCODE_WAKEUP
 ```
 
-## 5. Tại sao không dùng `adb tcpip 5555`?
-
-Lệnh `adb tcpip 5555` yêu cầu thiết bị phải đang kết nối USB hoặc hệ thống phải có quyền `root`/`debuggable`. Trên thiết bị thông thường (không root), cách duy nhất để bật ADB TCP mà không cần USB là dùng **Wireless Debugging** như hướng dẫn trên.
-
----
-
 *Xem thêm: [Kết nối ADB từ xa với Tailscale](adb-tailscale-remote.md) | [Điều khiển S10e từ Oppo A79](remote-control-s10e-oppo-a79.md)*
