@@ -1,5 +1,13 @@
 [
   {
+    "id": "adb-open-port-5555",
+    "title": "Mở cổng ADB 5555 trên Android từ A-Z (không cần USB, không cần Root)",
+    "date": "2026-11-23",
+    "tags": ["ADB", "Android", "Termux", "Wireless Debugging", "Port 5555"],
+    "excerpt": "Hướng dẫn đầy đủ cách ép ADB nghe ở cổng cố định 5555 ngay trên điện thoại bằng Termux, và giải thích lỗi 'no devices/emulators found' khi chạy adb tcpip.",
+    "file": "adb-open-port-5555.md"
+  },
+  {
     "id": "adb-localhost-wireless-debugging",
     "title": "Kết nối ADB với Localhost: Điều khiển Android từ chính nó, không USB, không Root",
     "date": "2026-11-23",

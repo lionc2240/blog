@@ -125,4 +125,4 @@ Lưu thành `adb-run.sh`, dùng như:
 ./adb-run.sh input keyevent KEYCODE_WAKEUP
 ```
 
-*Xem thêm: [Kết nối ADB từ xa với Tailscale](adb-tailscale-remote.md) | [Điều khiển S10e từ Oppo A79](remote-control-s10e-oppo-a79.md)*
+*Xem thêm: [Mở cổng ADB 5555 từ A-Z](post.html?id=adb-open-port-5555) | [Kết nối ADB từ xa với Tailscale](post.html?id=adb-tailscale-remote) | [Điều khiển S10e từ Oppo A79](post.html?id=remote-control-s10e-oppo-a79)*

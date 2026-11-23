@@ -18,7 +18,7 @@ Bạn muốn dọn dẹp bộ nhớ điện thoại ở nhà khi đang ngồi �
 
 ### Bước 2: Cố định cổng ADB (Thực hiện khi có cáp USB)
 Android 12 mặc định sẽ thay đổi cổng (port) mỗi lần bật lại Wireless Debugging. Để kết nối ổn định từ xa, bạn nên ép nó về cổng cố định (thường là 5555):
-1. Kết nối điện thoại với PC bằng cáp USB.
+1. Kết nối điện thoại với PC bằng cáp USB (hoặc dùng cách [adb localhost tại đây](post.html?id=adb-localhost-wireless-debugging)).
 2. Mở Terminal trên PC và gõ:
    ```bash
    adb tcpip 5555
