@@ -1,11 +1,11 @@
 [
   {
-    "id": "scrcpy-s10e-laptop",
-    "title": "Hướng dẫn điều khiển Samsung Galaxy S10e từ Laptop bằng Scrcpy",
-    "date": "2026-09-27",
-    "tags": ["Scrcpy", "Android", "S10e", "Laptop", "Remote Control"],
-    "excerpt": "Hướng dẫn chi tiết cách kết nối, phản chiếu và điều khiển điện thoại Samsung Galaxy S10e trực tiếp từ máy tính Laptop bằng Scrcpy qua USB và Wi-Fi.",
-    "file": "scrcpy-s10e-laptop.md"
+    "id": "adb-localhost-wireless-debugging",
+    "title": "Kết nối ADB với Localhost: Điều khiển Android từ chính nó, không USB, không Root",
+    "date": "2026-11-23",
+    "tags": ["ADB", "Android", "Termux", "Wireless Debugging", "Localhost"],
+    "excerpt": "Hướng dẫn dùng tính năng Wireless Debugging của Android 11+ để kết nối ADB ngay trên chính thiết bị, không cần cáp USB hay quyền Root.",
+    "file": "adb-localhost-wireless-debugging.md"
   },
   {
     "id": "scp-pc-to-android",
